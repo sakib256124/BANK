@@ -45,7 +45,7 @@ class Bank{
                 if(email == "khizar@gmail.com" && pin =="13366" && pass == "14366"){
                     Bank_management();
                 }else{
-                    cout<<"\n\n Youn E-mail, Pin & Password is Wrong .....";
+                    cout<<"\n\n Your E-mail, Pin & Password is Wrong .....";
                 }
                 break;
             case 2:
