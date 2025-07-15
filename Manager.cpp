@@ -5,10 +5,15 @@
 #include<windows.h>
 using namespace std;
 class Bank{
+    private:
+        int pin;
+        float balance;
+        string id, pass, name, fname,address, phone;
     public:
-    void Menu();
-    void Bank_management();
-    void Atm_management();
+        void Menu();
+        void bank_Management();
+        void atm_Management();
+        void new_User();
 
 };
     void Bank::Menu(){
@@ -43,13 +48,13 @@ class Bank{
                 }
                 //Check login info
                 if(email == "khizar@gmail.com" && pin =="13366" && pass == "14366"){
-                    Bank_management();
+                    bank_Management();
                 }else{
                     cout<<"\n\n Your E-mail, Pin & Password is Wrong .....";
                 }
                 break;
             case 2:
-                Atm_management();
+                atm_Management();
                 break;
             case 3:
                 exit(0);
@@ -60,7 +65,7 @@ class Bank{
         goto p;//for reapting Menu
     }
 
-    void Bank::Bank_management(){
+    void Bank::bank_Management(){
         p:
         system("cls");
         int choice;
@@ -81,6 +86,7 @@ class Bank{
         cin>>choice;
         switch(choice){
             case 1:
+                new_User();
                 break;
             case 2:
                 break;
@@ -110,7 +116,7 @@ class Bank{
         getch();
         goto p;
     }
-    void Bank::Atm_management(){
+    void Bank::atm_Management(){
         p:
         system("cls");
         int choice;
@@ -137,6 +143,31 @@ class Bank{
         goto p;
 
 
+    }
+    //Creating new User
+    void Bank::new_User(){
+        system("cls");
+        fstream file;////////////start from here ....lecture 4. mint 10.
+        int p;
+        float b;
+        string n,f,pa,a,ph,i;
+        cout<<"\n\n\t\tAdd New User";
+        cout<<"\n\n User ID : ";
+        cin>>id;
+        cout<<"\n\n\t\tName : ";
+        cin>>name;
+        cout<<"\n\n Father name : ";
+        cin>>fname;
+        cout<<"\n\n\t\tAddress : ";
+        cin>>address;
+        cout<<"\n\n Pin Code (5 digit) : ";
+        cin>>pin;
+        cout<<"\n\n\t\tPassword : ";
+        cin>>pass;
+        cout<<"\n\n Phone No. : ";
+        cin>>phone;
+        cout<<"\n\n\t\tCurrent Balance : ";
+        cin>>balance;
     }
 main(){
     Bank obj;
