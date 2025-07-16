@@ -14,6 +14,7 @@ class Bank{
         void bank_Management();
         void atm_Management();
         void new_User();
+        void already_User();
 
 };
     void Bank::Menu(){
@@ -144,10 +145,11 @@ class Bank{
 
 
     }
-    //Creating new User
+ //Creating new User
     void Bank::new_User(){
+        p:
         system("cls");
-        fstream file;////////////start from here ....lecture 4. mint 10.
+        fstream file;
         int p;
         float b;
         string n,f,pa,a,ph,i;
@@ -168,6 +170,34 @@ class Bank{
         cin>>phone;
         cout<<"\n\n\t\tCurrent Balance : ";
         cin>>balance;
+        //file open 
+        file.open("bank.txt",ios::in);
+        if(!file){
+            file.open("bank.txt",ios::app|ios::out);
+            file<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+            file.close();
+        }else{
+            file>>i>>n>>f>>a>>p>>pa>>ph>>b;//record data
+            while(!file.eof()){
+                if(i == id){
+                    cout<<"\n\n User ID Already Exist...";
+                    getch();
+                    goto p;
+                }
+                file>>i>>n>>f>>a>>p>>pa>>ph>>b;
+            }
+            file.close();
+            //if id not exist then re open  and insert recort
+            file.open("bank.txt",ios::app|ios::out);//ios app append data to file
+            file<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+            file.close();
+        }
+        cout<<"\n\n New User Account Created Successfully... ";
+        getch();//   only mine
+    }
+
+    void Bank::already_User(){
+        system("cls");
     }
 main(){
     Bank obj;
