@@ -15,6 +15,8 @@ class Bank{
         void atm_Management();
         void new_User();
         void already_User();
+        void Deposit();
+        void Withdraw();
 
 };
     void Bank::Menu(){
@@ -93,8 +95,10 @@ class Bank{
                 already_User();
                 break;
             case 3:
+                Deposit();
                 break;
             case 4:
+                Withdraw();
                 break;
             case 5:
                 break;
@@ -225,7 +229,94 @@ class Bank{
             }
         }
     }
-main(){
+
+    //Deposit money
+    void Bank::Deposit(){
+        fstream file, file1; //file1 for showing update data
+        string t_id;
+        float dep;//deposit amount
+        int found = 0;
+        system("cls");
+        cout<<"\n\n\t\t Deposit Amount Option ";
+        //fetch data of user from file 
+        file.open("bank.txt",ios::in);
+        if(!file){
+            cout<<"\n\nFile Opneing Error.....";
+        }else{
+            cout<<"\n\nUser ID : ";
+            cin>>t_id; //id which money deposit
+            file1.open("bank1.txt",ios::app|ios::out);
+            file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            while(!file.eof()){
+                if(t_id == id){//id find or not
+                    cout<<"\n\n Amount For Deposit :";
+                    cin>>dep;
+                    balance+=dep; //balance changed
+                    //Updated Data store in new file1
+                    file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+                    found++;
+                    cout<<"\n\n\t\tYour Amount  "<<dep<<"  Successfully Deposit...";
+                }else{
+                    file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+                }
+                file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+
+            }
+            file.close();
+            file1.close();
+            remove("bank.txt");// Old file
+            rename("bank1.txt","bank.txt"); // Old file replaced with Updated file
+            if(found == 0){
+                cout<<"\n\n User ID Can't found ...";
+            }
+        }
+    }
+    void Bank::Withdraw(){
+        fstream file, file1; //file1 for showing update data
+        string t_id;
+        float with;//Withdrwa amount
+        int found = 0;
+        system("cls");
+        cout<<"\n\n\t\t Withdraw Amount Option ";
+        //fetch data of user from file 
+        file.open("bank.txt",ios::in);
+        if(!file){
+            cout<<"\n\nFile Opneing Error.....";
+        }else{
+            cout<<"\n\nUser ID : ";
+            cin>>t_id; //id which money deposit
+            file1.open("bank1.txt",ios::app|ios::out);
+            file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            while(!file.eof()){
+                if(t_id == id){//id find or not
+                    cout<<"\n\n Amount For Withdraw :";
+                    cin>>with;
+                    if(with<=balance){// Withdraw valid amount
+                        balance-=with; //balance changed
+                    //Updated Data store in new file1
+                    file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+                    cout<<"\n\n\t\tYour Amount  "<<with<<"  Successfully Withdraw...";
+                    }else{
+                        file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";// passing data of user who want to withdraw
+                        cout<<"\n\n\t\tYour Current Balance "<<balance<< " is Less ....";
+                    }
+                    found ++;
+                }else{
+                    file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+                }
+                file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+
+            }
+            file.close();
+            file1.close();
+            remove("bank.txt");// Old file
+            rename("bank1.txt","bank.txt"); // Old file replaced with Updated file
+            if(found == 0){
+                cout<<"\n\n User ID Can't found ...";
+            }
+        }
+    }
+int main(){
     Bank obj;
     obj.Menu();
 }
