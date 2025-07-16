@@ -90,6 +90,7 @@ class Bank{
                 new_User();
                 break;
             case 2:
+                already_User();
                 break;
             case 3:
                 break;
@@ -198,6 +199,31 @@ class Bank{
 
     void Bank::already_User(){
         system("cls");
+        fstream file;
+        string t_id ;//take id as test id for check if exist
+        int found = 0;
+        cout<<"\n\n\t\t Already User Account";
+        file.open("bank.txt", ios::in);
+        if(!file){
+            cout<<"\n\n File Opening Error....";
+        }else{
+            cout<<"\n\nUser ID : ";
+            cin>>t_id; //test id
+            file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            while(!file.eof()){
+                if(t_id == id){
+                    cout<<"\n\n\t\tAlready User Account";
+                    cout<<"\n\n User ID :"<<id<<"\tPin Code :"<<pin<<"\t Password :"<<pass;
+                    found++;
+                }
+                file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+
+            }
+            file.close();
+            if(found == 0){
+                cout<<"\n\n User ID Can't found ...";
+            }
+        }
     }
 main(){
     Bank obj;
