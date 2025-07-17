@@ -18,6 +18,7 @@ class Bank{
         void Deposit();
         void Withdraw();
         void Transfer();
+        void Payment();
 
 };
     void Bank::Menu(){
@@ -51,7 +52,7 @@ class Bank{
                     cout<<"*";
                 }
                 //Check login info
-                if(email == "khizar@gmail.com" && pin =="13366" && pass == "14366"){
+                if(email == "sakib@gmail.com" && pin =="11111" && pass == "22222"){
                     bank_Management();
                 }else{
                     cout<<"\n\n Your E-mail, Pin & Password is Wrong .....";
@@ -102,9 +103,10 @@ class Bank{
                 Withdraw();
                 break;
             case 5:
-            Transfer();
+                Transfer();
                 break;
             case 6:
+                Payment();
                 break;
             case 7:
                 break;
@@ -391,7 +393,7 @@ class Bank{
                 balance += amount;
             }
 
-            file1 << " " << id << " " << name << " " << fname << " " << address << " "<< pin << " " << pass << " " << phone << " " << balance << "\n";
+            file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
         }
 
         file.close();
@@ -402,7 +404,48 @@ class Bank{
 
         cout << "\n\n\t\t Transaction Successful!";
     }
-
+    void Bank::Payment(){
+    system("cls");
+    fstream file,file1;
+    string t_id,b_name;
+    int found=0;
+    float amount;
+    SYSTEMTIME x;
+    cout<<"\n\n\t\tBills Payment Option";
+    file.open("bank.txt",ios::in);
+    if(!file){
+        cout<<"\n\nFile Opening Error...";
+    }else{
+        cout<<"\n\nEnter User ID : ";
+        cin>>t_id;
+        cin.ignore();
+        cout<<"\n\nBill Name : ";
+        getline(cin,b_name);
+        cout<<"\n\nBill Amount : ";
+        cin>>amount;
+        file1.open("bank1.txt",ios::out);
+        while(file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance){
+            if(t_id==id && amount<=balance){
+                balance-=amount;
+                found++;
+            }
+            file1<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+        }
+        file.close();
+        file1.close();
+        remove("bank.txt");
+        rename("bank1.txt","bank.txt");
+        if(found==1){
+            GetSystemTime(&x);
+            file.open("bill.txt",ios::app|ios::out);
+            file<<t_id<<" "<<b_name<<" "<<amount<<" "<<x.wDay<<"/"<<x.wMonth<<"/"<<x.wYear<<"\n";
+            file.close();
+            cout<<"\n\n\t\t"<<b_name<<" Bill Payment Successful...";
+        }else{
+            cout<<"\n\nUser ID or Amount Invalid";
+        }
+    }
+}
 int main(){
     Bank obj;
     obj.Menu();
