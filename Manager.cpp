@@ -17,6 +17,7 @@ class Bank{
         void already_User();
         void Deposit();
         void Withdraw();
+        void Transfer();
 
 };
     void Bank::Menu(){
@@ -101,6 +102,7 @@ class Bank{
                 Withdraw();
                 break;
             case 5:
+            Transfer();
                 break;
             case 6:
                 break;
@@ -292,7 +294,7 @@ class Bank{
                     cout<<"\n\n Amount For Withdraw :";
                     cin>>with;
                     if(with<=balance){// Withdraw valid amount
-                        balance-=with; //balance changed
+                        balance -= with; //balance changed
                     //Updated Data store in new file1
                     file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
                     cout<<"\n\n\t\tYour Amount  "<<with<<"  Successfully Withdraw...";
@@ -316,6 +318,91 @@ class Bank{
             }
         }
     }
+    void Bank::Transfer(){
+        fstream file, file1;
+        system("cls");
+        string s_id, r_id;
+        float amount;
+        bool senderFound = false, receiverFound = false;
+        float senderBalance = 0;
+
+        cout << "\n\n\t\tTransfer Money Option";
+
+        // Step 1: Validate Sender ID ---
+        cout << "\n\n Enter Sender User ID For Transaction : ";
+        cin >> s_id;
+
+        file.open("bank.txt", ios::in);
+        if (!file){
+            cout << "\n\n File Opening Error...";
+            return;
+        }
+
+        while(file >> id >> name >> fname >> address >> pin >> pass >> phone >> balance){
+            if (s_id == id){
+                senderFound = true;
+                senderBalance = balance;
+                break;  // Stop searching once found
+            }
+        }
+        file.close();
+
+        if (!senderFound){
+            cout << "\n\n\t\t Sender ID not found.";
+            return;
+        }
+
+        //  Step 2: Validate Receiver ID ---
+        cout << "\n\n Enter Receiver User ID for Transaction : ";
+        cin >> r_id;
+
+        file.open("bank.txt", ios::in);
+        while(file >> id >> name >> fname >> address >> pin >> pass >> phone >> balance){
+            if (r_id == id){
+                receiverFound = true;
+                break;
+            }
+        }
+        file.close();
+
+        if (!receiverFound){
+            cout << "\n\n\t\t Receiver ID not found.";
+            return;
+        }
+
+        //  Step 3: Amount and Balance Check ---
+        cout << "\n\n Enter Transaction Amount : ";
+        cin >> amount;
+
+        if (amount > senderBalance){
+            cout << "\n\n\t\t Transaction Failed: Insufficient Balance.";
+            return;
+        }
+
+        //  Step 4: Perform Transaction ---
+        file.open("bank.txt", ios::in);
+        file1.open("bank1.txt", ios::out);
+
+        while(file >> id >> name >> fname >> address >> pin >> pass >> phone >> balance){
+            if (id == s_id){
+                balance -= amount;
+            } 
+            else if (id == r_id){
+                balance += amount;
+            }
+
+            file1 << " " << id << " " << name << " " << fname << " " << address << " "<< pin << " " << pass << " " << phone << " " << balance << "\n";
+        }
+
+        file.close();
+        file1.close();
+
+        remove("bank.txt");
+        rename("bank1.txt", "bank.txt");
+
+        cout << "\n\n\t\t Transaction Successful!";
+    }
+
 int main(){
     Bank obj;
     obj.Menu();
