@@ -22,6 +22,8 @@ class Bank{
         void Search();//search any user record
         void Edit();//Edit user recrod
         void delete_Record();//deleteing any user
+        void all_Record();//for showing all record
+        //void all_Payment();//for showing all Bill Payment
 
 };
     void Bank::Menu(){
@@ -122,8 +124,10 @@ class Bank{
                 delete_Record();
                 break;
             case 10:
+                all_Record();
                 break;
             case 11:
+                //all_Payment();
                 break;
             case 12:
                 Menu();
@@ -470,14 +474,14 @@ class Bank{
                 if(t_id == id){
                     system("cls");
                     cout<<"\n\n\t User Details...\n\n";
-                    cout<<"User ID   : "<<id<<endl;
-                    cout<<"Name      : "<<name<<endl;
-                    cout<<"Father's Name: "<<fname<<endl;
-                    cout<<"Address   : "<<address<<endl;
-                    cout<<"Pin       : "<<pin<<endl;
-                    cout<<"Password  : "<<pass<<endl;
-                    cout<<"Phone     : "<<phone<<endl;
-                    cout<<"Balance   : "<<balance<<endl;
+                    cout<<"User ID       : "<<id<<endl;
+                    cout<<"Name          : "<<name<<endl;
+                    cout<<"Father's Name : "<<fname<<endl;
+                    cout<<"Address       : "<<address<<endl;
+                    cout<<"Pin           : "<<pin<<endl;
+                    cout<<"Password      : "<<pass<<endl;
+                    cout<<"Phone         : "<<phone<<endl;
+                    cout<<"Balance       : "<<balance<<endl;
                     found ++;
                 }
                 file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
@@ -539,7 +543,64 @@ class Bank{
 
     }
     void Bank::delete_Record(){
-        
+        system("cls");
+        fstream file,file1;
+        string t_id;//which id for delete
+        int found = 0;
+        cout<<"\n\n\t\tDeleting User Record";
+        file.open("bank.txt",ios::in);
+        if(!file){
+            cout<<"\n\nFile Opening Error...";
+        }else{
+            cout<<"\n\n Enter User ID : ";
+            cin>>t_id;
+            file1.open("bank1.txt",ios::app|ios::in);
+            file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            while(!file.eof()){
+                if(t_id == id){
+                    cout<<"\n\n\t\tRecord Deleted Successfully";
+                    found ++;
+                }else{
+                    file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+                }
+                file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+
+            }
+            file.close();
+            file1.close();
+            remove("bank.txt");
+            rename("bank1.txt","bank.txt");
+            if(found == 0){
+                cout<<"\n\n User ID does not found ";
+            }
+        }
+    }
+    void Bank::all_Record(){
+        system("cls");
+        fstream file;
+        cout<<"\n\n\t\tAll User Records\n\n";
+        file.open("bank.txt",ios::in);
+        if(!file){
+            cout<<"\n\nFile Opening Error...";
+        }else{
+            int found = 0;
+            while(file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance){
+                cout<<"User ID    : "<<id<<"\n";
+                cout<<"Name       : "<<name<<"\n";
+                cout<<"Father Name: "<<fname<<"\n";
+                cout<<"Address    : "<<address<<"\n";
+                cout<<"Pin        : "<<pin<<"\n";
+                cout<<"Password   : "<<pass<<"\n";
+                cout<<"Phone No.  : "<<phone<<"\n";
+                cout<<"Balance    : "<<balance<<"\n";
+                cout<<"----------------------------------------\n\n";
+                found ++;
+            }
+            file.close();
+            if(found ==0){
+                cout<<"\n\nNo Records Found...";
+            }
+        }
     }
 int main(){
     Bank obj;
