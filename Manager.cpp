@@ -23,7 +23,7 @@ class Bank{
         void Edit();//Edit user recrod
         void delete_Record();//deleteing any user
         void all_Record();//for showing all record
-        //void all_Payment();//for showing all Bill Payment
+        void all_Payment();//for showing all Bill Payment
 
 };
     void Bank::Menu(){
@@ -127,7 +127,7 @@ class Bank{
                 all_Record();
                 break;
             case 11:
-                //all_Payment();
+                all_Payment();
                 break;
             case 12:
                 Menu();
@@ -599,6 +599,32 @@ class Bank{
             file.close();
             if(found ==0){
                 cout<<"\n\nNo Records Found...";
+            }
+        }
+    }
+    void Bank::all_Payment(){
+        system("cls");
+        fstream file;
+        int found = 0;
+        string t_id,b_name,date;
+        float amount;
+        cout<<"\n\n\t\tShow All Bill's Payments Record \n";
+        file.open("bill.txt",ios::in);
+        if(!file){
+            cout<<"\n\n File Opening Error ....";
+        }else{
+            while (file>>t_id>>b_name>>amount>>date)
+            {
+                cout<<"User ID   : "<<t_id<<"\n";
+                cout<<"Bill Name : "<<b_name<<"\n";
+                cout<<"Amount    : "<<amount<<"\n";
+                cout<<"Date      : "<<date<<"\n";
+                cout<<"----------------------------------------\n\n";
+                found ++;
+            }
+            file.close();
+            if(found==0){
+                cout<<"\n\nNo Bill's Payment Found"<<endl;
             }
         }
     }
