@@ -14,12 +14,14 @@ class Bank{
         void bank_Management();
         void atm_Management();
         void new_User();
-        void already_User();
+        void already_User();//user check his pin ,pass(want to know)
         void Deposit();
         void Withdraw();
         void Transfer();
         void Payment();
         void Search();//search any user record
+        void Edit();//Edit user recrod
+        void delete_Record();//deleteing any user
 
 };
     void Bank::Menu(){
@@ -114,8 +116,10 @@ class Bank{
                 Search();
                 break;
             case 8:
+                Edit();
                 break;
             case 9:
+                delete_Record();
                 break;
             case 10:
                 break;
@@ -484,6 +488,58 @@ class Bank{
                 cout<<"\n\n User ID does not found ";
             }
         }
+    }
+    void Bank::Edit(){
+        system("cls");
+        fstream file,file1;
+        string t_id;//which id
+        int found = 0;
+        int npin;
+        string  npass, nname, nfname,naddress, nphone;  // new name and other varible for edit
+        cout<<"\n\n\t\tEdit User Record";
+        file.open("bank.txt",ios::in);
+        if(!file){
+            cout<<"\n\nFile Opening Error...";
+        }else{
+            cout<<"\n\n Enter User ID : ";
+            cin>>t_id;
+            file1.open("bank1.txt",ios::app|ios::in);
+            file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            while(!file.eof()){
+                if(t_id == id){
+                    cout<<"\n\n\t\tName : ";
+                    cin>>nname;
+                    cout<<"\n\n Father name : ";
+                    cin>>nfname;
+                    cout<<"\n\n\t\tAddress : ";
+                    cin>>naddress;
+                    cout<<"\n\n Pin Code (5 digit) : ";
+                    cin>>npin;
+                    cout<<"\n\n\t\tPassword : ";
+                    cin>>npass;
+                    cout<<"\n\n Phone No. : ";
+                    cin>>nphone;
+                    file1<<" "<<id<<" "<<nname<<" "<<nfname<<" "<<naddress<<" "<<npin<<" "<<npass<<" "<<nphone<<" "<<balance<<"\n";
+                    cout<<"\n\n\t\tRecord Edit Successfully";
+                    found ++;
+                }else{
+                    file1<<" "<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+                }
+                file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+
+            }
+            file.close();
+            file1.close();
+            remove("bank.txt");
+            rename("bank1.txt","bank.txt");
+            if(found == 0){
+                cout<<"\n\n User ID does not found ";
+            }
+        }
+
+    }
+    void Bank::delete_Record(){
+        
     }
 int main(){
     Bank obj;
