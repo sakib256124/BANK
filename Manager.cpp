@@ -25,6 +25,7 @@ class Bank_ATM{
         void all_Record();//for showing all record
         void all_Payment();//for showing all Bill Payment
         void user_Balance();
+        void withdraw_ATM();
 
 };
     void Bank_ATM::Menu(){
@@ -143,7 +144,7 @@ class Bank_ATM{
         system("cls");
         int choice;
         cout<<"\n\n\t\t\tATM Management System";
-        cout<<"\n\n 1. User Login & Check Balance";
+        cout<<"\n\n 1. Check Balance";
         cout<<"\n 2. Withdraw Amount";
         cout<<"\n 3. Account Details";
         cout<<"\n 4. Go Back";
@@ -154,6 +155,7 @@ class Bank_ATM{
                 user_Balance();
                 break;
             case 2:
+                withdraw_ATM();
                 break;
             case 3:
                 break;
@@ -340,7 +342,6 @@ class Bank_ATM{
         float amount;
         bool senderFound = false, receiverFound = false;
         float senderBalance = 0;
-
         cout << "\n\n\t\tTransfer Money Option";
 
         // Step 1: Validate Sender ID ---
@@ -637,16 +638,15 @@ class Bank_ATM{
         int t_pin;
         char ch;
         int found = 0;
-        cout<<"\n\n\t\tUser Login & Check Balance ";
+        cout<<"\n\n\t\t Check Balance ";
         file.open("bank.txt",ios::in);
         if(!file){
             cout<<"\n\nFile Opening Error.....";
         }else{
-            cout<<"\n\n Enter User ID :";
+            cout<<"\n\n Enter User ID : ";
             cin>>t_id;
-
             cout<<"\n\n Pin Code :";
-            string temp_pin = "";
+            string temp_pin = ""; //hiding pass and pin 
             for(int i = 1; i <= 5; i++){
                 ch = getch();
                 temp_pin += ch;
@@ -660,7 +660,6 @@ class Bank_ATM{
                 t_pass += ch;
                 cout<<"*";
             }
-
             while(file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance){
                 if(t_id == id && t_pin == pin && t_pass == pass){
                     cout<<"\n\n\t Your Current Balance is : "<<balance<<endl;
@@ -674,6 +673,72 @@ class Bank_ATM{
             }
         }
     }
+    void Bank_ATM::withdraw_ATM(){
+        fstream file,file1,withdrawFile;
+        string t_id,t_pass;
+        int t_pin;
+        float with;
+        char ch;
+        int found=0;
+        SYSTEMTIME x;
+        system("cls");
+        cout<<"\n\n\t\tWithdraw Amount Option";
+        file.open("bank.txt",ios::in);
+        if(!file){
+            cout<<"\n\nFile Opening Error....";
+        }
+        else{
+            cout<<"\n\nEnter User ID : ";
+            cin>>t_id;
+            cout<<"\n\nPin Code : ";
+            string temp_pin="";
+            for(int i=1;i<=5;i++){
+                ch=getch();
+                temp_pin+=ch;
+                cout<<"*";
+            }
+            t_pin=stoi(temp_pin);
+            cout<<"\n\nPassword : ";
+            for(int i=1;i<=5;i++){
+                ch=getch();
+                t_pass+=ch;
+                cout<<"*";
+            }
+            file1.open("bank1.txt",ios::out);
+            withdrawFile.open("withdraw.txt",ios::app|ios::out);
+            file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            while(!file.eof()){
+                if(t_id==id && t_pin==pin && t_pass==pass){
+                    cout<<"\n\nWithdraw Amount : ";
+                    cin>>with;
+                    if(with<=balance){
+                        balance-=with;
+                        cout<<"\n\n\t\tYour Amount "<<with<<" Successfully Withdraw...";
+                        cout<<"\n\n\t\tYour Current Balance "<<balance<<endl;
+                        GetSystemTime(&x);
+                        withdrawFile<<t_id<<" "<<with<<" "
+                                    <<x.wDay<<"/"<<x.wMonth<<"/"<<x.wYear<<" "
+                                    <<x.wHour<<":"<<x.wMinute<<":"<<x.wSecond<<"\n";
+                    }
+                    else{
+                        cout<<"\n\n\t\tYour Current Balance "<<balance<<" is Less"<<endl;
+                    }
+                    found++;
+                }
+                file1<<id<<" "<<name<<" "<<fname<<" "<<address<<" "<<pin<<" "<<pass<<" "<<phone<<" "<<balance<<"\n";
+                file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            }
+            file.close();
+            file1.close();
+            withdrawFile.close();
+            remove("bank.txt");
+            rename("bank1.txt","bank.txt");
+            if(found==0){
+                cout<<"\n\nInvalid User ID / PIN / Password. Withdrawal Failed.\n";
+            }
+        }
+    }
+
 int main(){
     Bank_ATM obj;
     obj.Menu();
