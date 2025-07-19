@@ -4,7 +4,7 @@
 #include<fstream>
 #include<windows.h>
 using namespace std;
-class Bank{
+class Bank_ATM{
     private:
         int pin;
         float balance;
@@ -24,9 +24,10 @@ class Bank{
         void delete_Record();//deleteing any user
         void all_Record();//for showing all record
         void all_Payment();//for showing all Bill Payment
+        void user_Balance();
 
 };
-    void Bank::Menu(){
+    void Bank_ATM::Menu(){
         p:
         system("cls");
         int choice;
@@ -76,7 +77,7 @@ class Bank{
         goto p;//for reapting Menu
     }
 
-    void Bank::bank_Management(){
+    void Bank_ATM::bank_Management(){
         p:
         system("cls");
         int choice;
@@ -137,7 +138,7 @@ class Bank{
         getch();
         goto p;
     }
-    void Bank::atm_Management(){
+    void Bank_ATM::atm_Management(){
         p:
         system("cls");
         int choice;
@@ -150,6 +151,7 @@ class Bank{
         cin>>choice;
         switch(choice){
             case 1:
+                user_Balance();
                 break;
             case 2:
                 break;
@@ -166,7 +168,7 @@ class Bank{
 
     }
  //Creating new User
-    void Bank::new_User(){
+    void Bank_ATM::new_User(){
         p:
         system("cls");
         fstream file;
@@ -184,7 +186,7 @@ class Bank{
         cin>>address;
         cout<<"\n\n Pin Code (5 digit) : ";
         cin>>pin;
-        cout<<"\n\n\t\tPassword : ";
+        cout<<"\n\n\t\tPassword (5 digit) : ";
         cin>>pass;
         cout<<"\n\n Phone No. : ";
         cin>>phone;
@@ -216,7 +218,7 @@ class Bank{
         getch();//   only mine
     }
 
-    void Bank::already_User(){
+    void Bank_ATM::already_User(){
         system("cls");
         fstream file;
         string t_id ;//take id as test id for check if exist
@@ -246,7 +248,7 @@ class Bank{
     }
 
     //Deposit money
-    void Bank::Deposit(){
+    void Bank_ATM::Deposit(){
         fstream file, file1; //file1 for showing update data
         string t_id;
         float dep;//deposit amount
@@ -286,7 +288,7 @@ class Bank{
             }
         }
     }
-    void Bank::Withdraw(){
+    void Bank_ATM::Withdraw(){
         fstream file, file1; //file1 for showing update data
         string t_id;
         float with;//Withdrwa amount
@@ -331,7 +333,7 @@ class Bank{
             }
         }
     }
-    void Bank::Transfer(){
+    void Bank_ATM::Transfer(){
         fstream file, file1;
         system("cls");
         string s_id, r_id;
@@ -415,7 +417,7 @@ class Bank{
 
         cout << "\n\n\t\t Transaction Successful!";
     }
-    void Bank::Payment(){
+    void Bank_ATM::Payment(){
         system("cls");
         fstream file,file1;
         string t_id,b_name;
@@ -457,7 +459,7 @@ class Bank{
             }
         }
     }
-    void Bank::Search(){
+    void Bank_ATM::Search(){
         system("cls");
         string t_id;
         int found = 0;
@@ -493,7 +495,7 @@ class Bank{
             }
         }
     }
-    void Bank::Edit(){
+    void Bank_ATM::Edit(){
         system("cls");
         fstream file,file1;
         string t_id;//which id
@@ -542,7 +544,7 @@ class Bank{
         }
 
     }
-    void Bank::delete_Record(){
+    void Bank_ATM::delete_Record(){
         system("cls");
         fstream file,file1;
         string t_id;//which id for delete
@@ -575,7 +577,7 @@ class Bank{
             }
         }
     }
-    void Bank::all_Record(){
+    void Bank_ATM::all_Record(){
         system("cls");
         fstream file;
         cout<<"\n\n\t\tAll User Records\n\n";
@@ -602,7 +604,7 @@ class Bank{
             }
         }
     }
-    void Bank::all_Payment(){
+    void Bank_ATM::all_Payment(){
         system("cls");
         fstream file;
         int found = 0;
@@ -628,7 +630,51 @@ class Bank{
             }
         }
     }
+    void Bank_ATM::user_Balance(){
+        system("cls");
+        fstream file;
+        string t_id, t_pass;
+        int t_pin;
+        char ch;
+        int found = 0;
+        cout<<"\n\n\t\tUser Login & Check Balance ";
+        file.open("bank.txt",ios::in);
+        if(!file){
+            cout<<"\n\nFile Opening Error.....";
+        }else{
+            cout<<"\n\n Enter User ID :";
+            cin>>t_id;
+
+            cout<<"\n\n Pin Code :";
+            string temp_pin = "";
+            for(int i = 1; i <= 5; i++){
+                ch = getch();
+                temp_pin += ch;
+                cout << "*";
+            }
+            t_pin = stoi(temp_pin);
+
+            cout<<"\n\n Password : ";
+            for(int i = 1;i<=5;i++){
+                ch = getch();
+                t_pass += ch;
+                cout<<"*";
+            }
+
+            while(file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance){
+                if(t_id == id && t_pin == pin && t_pass == pass){
+                    cout<<"\n\n\t Your Current Balance is : "<<balance<<endl;
+                    found ++;
+                    break;
+                }
+            }
+            file.close();
+            if(found == 0){
+                cout<<"\n\n Invalid Credentials. Please Try Again ...";
+            }
+        }
+    }
 int main(){
-    Bank obj;
+    Bank_ATM obj;
     obj.Menu();
 }
