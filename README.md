@@ -36,6 +36,7 @@ A **Bank Management System** implemented in **C++** with a console-based interfa
 ---
 
 ## 📂 **Data Storage**
+- `Manager.cpp`:For Storing  full Implementation.
 - `bank.txt` : Stores all user account records.
 - `bank1.txt` : Temporary file for updating user records.
 - `bill.txt` : Stores bill payment records.
