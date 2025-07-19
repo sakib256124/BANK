@@ -24,8 +24,10 @@ class Bank_ATM{
         void delete_Record();//deleteing any user
         void all_Record();//for showing all record
         void all_Payment();//for showing all Bill Payment
-        void user_Balance();
-        void withdraw_ATM();
+        void user_Balance();//balance check in atm
+        void withdraw_ATM();//balance withdraw in atm
+        void check_Details(); //check user details
+
 
 };
     void Bank_ATM::Menu(){
@@ -158,6 +160,7 @@ class Bank_ATM{
                 withdraw_ATM();
                 break;
             case 3:
+                check_Details();
                 break;
             case 4:
                 Menu();
@@ -735,6 +738,81 @@ class Bank_ATM{
             rename("bank1.txt","bank.txt");
             if(found==0){
                 cout<<"\n\nInvalid User ID / PIN / Password. Withdrawal Failed.\n";
+            }
+        }
+    }
+    void Bank_ATM::check_Details(){
+        fstream file,file1;
+        string t_id,t_pass;
+        int t_pin;
+        char ch;
+        int found=0;
+        system("cls");
+        cout<<"\n\n\t\tWithdraw Check Details Option ";
+        file.open("bank.txt",ios::in);
+        if(!file){
+            cout<<"\n\nFile Opening Error....";
+        }
+        else{
+            cout<<"\n\nEnter User ID : ";
+            cin>>t_id;
+            cout<<"\n\nPin Code : ";
+            string temp_pin="";
+            for(int i=1;i<=5;i++){
+                ch=getch();
+                temp_pin+=ch;
+                cout<<"*";
+            }
+            t_pin=stoi(temp_pin);
+            cout<<"\n\nPassword : ";
+            for(int i=1;i<=5;i++){
+                ch=getch();
+                t_pass+=ch;
+                cout<<"*";
+            }
+            system("cls");
+            file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            while(!file.eof()){
+                if(t_id==id && t_pin==pin && t_pass==pass){
+                    cout<<"\n\n   User Details "<<endl;
+                    cout<<"\nUser ID    : "<<id<<"\n";
+                    cout<<"Name       : "<<name<<"\n";
+                    cout<<"Father Name: "<<fname<<"\n";
+                    cout<<"Address    : "<<address<<"\n";
+                    cout<<"Pin        : "<<pin<<"\n";
+                    cout<<"Password   : "<<pass<<"\n";
+                    cout<<"Phone No.  : "<<phone<<"\n";
+                    cout<<"Balance    : "<<balance<<"\n";
+                    cout<<"\n\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n";
+
+                    string w_id, date,time;
+                    float wamo;
+                    file1.open("withdraw.txt",ios::in);
+                    cout<<"\n\t Withdraw History : \n\n";
+                    if(!file1){
+                        cout<<"\n\nWtthdraw History Not Found ..."<<endl;
+                    }else{
+                        int with_Found = 0;
+                        while(file1>>w_id>>wamo>>date>>time){
+                            if(w_id == t_id){
+                                cout<<"Amount  : "<<wamo<<endl;
+                                cout<<"Date    : "<<date<<endl;
+                                cout<<"\tTime    : "<<time<<endl;
+                                cout<<"\n_ _ _ _ _ _ _ _ _\n"<<endl;
+                                with_Found++;
+                            }
+                        }
+                        if(with_Found == 0){
+                            cout<<"\n No Withdraw Record Found  \n";
+                        }
+                    }
+                    found ++;
+                }
+                file>>id>>name>>fname>>address>>pin>>pass>>phone>>balance;
+            }
+            file.close();
+            if(found==0){
+                cout<<"\n\nInvalid User ID / PIN / Password. Checking Failed.\n";
             }
         }
     }
